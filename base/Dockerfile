@@ -1,4 +1,4 @@
-FROM alpine:3.13
+FROM alpine:3.15
 
 ENV PHPIZE_DEPS="autoconf automake dpkg dpkg-dev file g++ gcc libc-dev libtool make pcre-dev pcre2-dev php8-dev php8-pear pkgconf re2c zlib-dev"
 
@@ -20,7 +20,6 @@ RUN set -ex \
         php8-iconv \
         php8-imap \
         php8-intl \
-        php8-json \
         php8-mbstring \
         php8-mysqli \
         php8-opcache \
