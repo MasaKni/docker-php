@@ -8,6 +8,5 @@ RUN apk update \
     && rm -rf /var/cache/apk/* /tmp/* /usr/share/man
 
 COPY conf.d/* /etc/php8/conf.d/
-
 ENV PHP_XDEBUG_MAX_NESTING_LEVEL 250
 ENV PHP_XDEBUG_REMOTE_HOST docker.for.mac.localhost
