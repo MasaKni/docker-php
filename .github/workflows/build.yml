@@ -1,6 +1,10 @@
 name: Build image and push to Docker Hub
 
-on: [push, workflow_dispatch]
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *'
 
 env:
   BRANCH: '8.1'
