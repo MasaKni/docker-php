@@ -6,7 +6,7 @@ on:
       - '*'
   workflow_dispatch:
   schedule:
-    - cron: '19 9 * * *'
+    - cron: '50 9 * * *'
 
 env:
   BRANCH: '7.3'
