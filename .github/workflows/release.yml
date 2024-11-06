@@ -2,8 +2,11 @@ name: Schedule Branch Builds
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - '*' 
   schedule:
-    - cron: '0 15 * * *'
+    - cron: '5 15 * * *'
 
 jobs:
   push_to_branches:
