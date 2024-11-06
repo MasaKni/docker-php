@@ -29,10 +29,10 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ env.branch.name }}
 
       - name: Commit and Push to Branch
         run: |
-          # Make an empty commit to trigger push-based workflows
-          git checkout ${{ matrix.branch.name }}
           git commit --allow-empty -m "Scheduled trigger for branch ${{ matrix.branch.name }}"
           git push origin ${{ matrix.branch.name }}
