@@ -6,7 +6,7 @@ on:
       - '*'
   workflow_dispatch:
   schedule:
-    - cron: '50 9 * * *'
+    - cron: '21 12 * * *'
 
 env:
   BRANCH: '7.3'
@@ -24,8 +24,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        # with:
-          # ref: ${{ env.BRANCH }}
+        with:
+          ref: 7.4
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
