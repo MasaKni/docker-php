@@ -3,7 +3,7 @@ name: Build image and push to Docker Hub
 on:
   workflow_dispatch:
   schedule:
-    - cron: '11 12 * * *'
+    - cron: '4 12 * * *'
   push:
     branches:
       - '7.3'
@@ -12,7 +12,7 @@ on:
 
 
 env:
-  BRANCH: '7.3'
+  # BRANCH: '7.3'
   APACHE_WORKFLOW_ID: '8995258'
   SWOOLE_WORKFLOW_ID: '8996324'
 
@@ -23,12 +23,14 @@ jobs:
       max-parallel: 1
       matrix:
         version: ['base', 'mssql', 'xdebug', 'mssql-xdebug']
+        branch: ['7.3', '7.4', '8.0']
+
     steps:
       -
         name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: ${{ env.BRANCH }}
+          ref: ${{ matrix.branch }}
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -52,7 +54,7 @@ jobs:
           fi
       -
         name: Build latest
-        if: ${{ env.BRANCH == '8.3' && matrix.version == 'base' }}
+        if: ${{ matrix.branch == '8.3' && matrix.version == 'base' }}
         uses: docker/build-push-action@v2
         with:
           context: ./base
@@ -66,7 +68,7 @@ jobs:
           context: ./${{ matrix.version }}
           push: true
           platforms: ${{ secrets.DOCKER_PLATFORMS }}
-          tags: rshop/php:${{ env.BRANCH }}${{ steps.build-tag.outputs.tag }}
+          tags: rshop/php:${{ matrix.branch }}${{ steps.build-tag.outputs.tag }}
       -
         name: Trigger apache ${{ matrix.version }} rebuild
         uses: rshop/trigger-workflow-action@v1
@@ -74,7 +76,7 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           repository: 'rshop/docker-php-apache'
           workflowId: ${{ env.APACHE_WORKFLOW_ID }}
-          branch: ${{ env.BRANCH }}${{ steps.build-tag.outputs.tag }}
+          branch: ${{ matrix.branch }}${{ steps.build-tag.outputs.tag }}
       -
         name: Trigger swoole ${{ matrix.version }} rebuild
         if: ${{ !contains(matrix.version, 'xdebug') }}
@@ -83,4 +85,4 @@ jobs:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           repository: 'rshop/docker-swoole'
           workflowId: ${{ env.SWOOLE_WORKFLOW_ID }}
-          branch: ${{ env.BRANCH }}${{ steps.build-tag.outputs.tag }}
+          branch: ${{ matrix.branch }}${{ steps.build-tag.outputs.tag }}
