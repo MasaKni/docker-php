@@ -1,0 +1,34 @@
+name: Schedule Branch Builds
+
+on:
+  schedule:
+    - cron: '0 15 * * *'
+
+jobs:
+  push_to_branches:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        branch:
+          - { name: '7.3', delay: 0 }
+          - { name: '7.4', delay: 10 }
+          - { name: '8.0', delay: 20 }
+
+    steps:
+      - name: Introduce delay
+        run: sleep ${{ matrix.branch.delay }}
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Commit and Push to Branch
+        run: |
+          # Make an empty commit to trigger push-based workflows
+          git checkout ${{ matrix.branch.name }}
+          git commit --allow-empty -m "Scheduled trigger for branch ${{ matrix.branch.name }}"
+          git push origin ${{ matrix.branch.name }}
