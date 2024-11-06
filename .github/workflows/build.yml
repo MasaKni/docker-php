@@ -1,12 +1,15 @@
 name: Build image and push to Docker Hub
 
 on:
-  push:
-    branches:
-      - '*'
   workflow_dispatch:
   schedule:
-    - cron: '5 12 * * *'
+    - cron: '11 12 * * *'
+  push:
+    branches:
+      - '7.3'
+      - '7.4'
+      - '8.0'
+
 
 env:
   BRANCH: '7.3'
