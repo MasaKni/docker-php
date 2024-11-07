@@ -20,21 +20,33 @@ jobs:
       - name: Introduce delay
         run: sleep ${{ matrix.branch.delay }}
 
-      - name: Configure Git
-        run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "github-actions@github.com"
-
-      - name: Checkout branch
-        uses: actions/checkout@v2
+      - name: Trigger build workflow on ${{ matrix.branch.name }}
+        uses: actions/github-script@v3
         with:
-          ref: ${{ matrix.branch.name }}
-          fetch-depth: 0
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'MasaKni',
+              repo: 'docker-php',
+              workflow_id: 'build.yml',
+              ref: '${{ matrix.branch.name }}',
+              inputs: {}
+            })
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Configure Git
+      #   run: |
+      #     git config --global user.name "github-actions"
+      #     git config --global user.email "github-actions@github.com"
 
-      - name: Push to Branch with PAT
-        env:
-          PAT: ${{ secrets.ACCESS_TOKEN }}
-        run: |
-          git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}
-          git commit --allow-empty -m "Scheduled trigger for branch ${{ matrix.branch.name }}"
-          git push origin ${{ matrix.branch.name }}
+      # - name: Checkout branch
+      #   uses: actions/checkout@v2
+      #   with:
+      #     ref: ${{ matrix.branch.name }}
+      #     fetch-depth: 0
+
+      # - name: Push to Branch with PAT
+      #   env:
+      #     PAT: ${{ secrets.ACCESS_TOKEN }}
+      #   run: |
+      #     git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}
+      #     git commit --allow-empty -m "Scheduled trigger for branch ${{ matrix.branch.name }}"
+      #     git push origin ${{ matrix.branch.name }}
