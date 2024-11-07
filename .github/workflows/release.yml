@@ -3,10 +3,8 @@ name: Schedule Branch Builds
 on:
   workflow_dispatch:
   push:
-    branches:
-      - '*' 
   schedule:
-    - cron: '14 15 * * *'
+    - cron: '56 7 * * *' 
 
 jobs:
   push_to_branches:
@@ -33,7 +31,10 @@ jobs:
           ref: ${{ matrix.branch.name }}
           fetch-depth: 0
 
-      - name: Commit and Push to Branch
+      - name: Push to Branch with PAT
+        env:
+          PAT: ${{ secrets.ACCESS_TOKEN }}
         run: |
+          git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}
           git commit --allow-empty -m "Scheduled trigger for branch ${{ matrix.branch.name }}"
           git push origin ${{ matrix.branch.name }}
