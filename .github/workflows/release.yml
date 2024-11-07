@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
   schedule:
-    - cron: '56 7 * * *' 
+    - cron: '0 3 * * *' 
 
 jobs:
   push_to_branches:
@@ -13,8 +13,11 @@ jobs:
       matrix:
         branch:
           - { name: '7.3', delay: 0 }
-          - { name: '7.4', delay: 10 }
-          - { name: '8.0', delay: 20 }
+          - { name: '7.4', delay: 1200 }
+          - { name: '8.0', delay: 2400 }
+          - { name: '8.1', delay: 3600 }
+          - { name: '8.2', delay: 4800 }
+          - { name: '8.3', delay: 6000 }
 
     steps:
       - name: Introduce delay
@@ -32,21 +35,3 @@ jobs:
               inputs: {}
             })
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Configure Git
-      #   run: |
-      #     git config --global user.name "github-actions"
-      #     git config --global user.email "github-actions@github.com"
-
-      # - name: Checkout branch
-      #   uses: actions/checkout@v2
-      #   with:
-      #     ref: ${{ matrix.branch.name }}
-      #     fetch-depth: 0
-
-      # - name: Push to Branch with PAT
-      #   env:
-      #     PAT: ${{ secrets.ACCESS_TOKEN }}
-      #   run: |
-      #     git remote set-url origin https://x-access-token:${PAT}@github.com/${{ github.repository }}
-      #     git commit --allow-empty -m "Scheduled trigger for branch ${{ matrix.branch.name }}"
-      #     git push origin ${{ matrix.branch.name }}
