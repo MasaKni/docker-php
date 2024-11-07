@@ -21,7 +21,7 @@ jobs:
         run: sleep ${{ matrix.branch.delay }}
 
       - name: Trigger build workflow on ${{ matrix.branch.name }}
-        uses: actions/github-script@v3
+        uses: actions/github-script@v6
         with:
           script: |
             github.rest.actions.createWorkflowDispatch({
