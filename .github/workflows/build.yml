@@ -2,12 +2,10 @@ name: Build image and push to Docker Hub
 
 on:
   push:
-    branches:
-      - '*'
   workflow_dispatch:
 
 env:
-  BRANCH: '7.4'
+  BRANCH: '7.3'
   APACHE_WORKFLOW_ID: '8995258'
   SWOOLE_WORKFLOW_ID: '8996324'
 
