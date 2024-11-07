@@ -2,10 +2,6 @@ name: Build image and push to Docker Hub
 
 on:
   push:
-    branches:
-      - '*'
-  schedule:
-    - cron: '2 13 * * *'
   workflow_dispatch:
 
 env:
@@ -24,8 +20,9 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        # with:
-          # ref: ${{ env.BRANCH }}
+        with:
+          ref: ${{ env.BRANCH }}
+
       -
         name: Set up QEMU
         uses: docker/setup-qemu-action@v1
