@@ -27,7 +27,7 @@ jobs:
         with:
           script: |
             github.rest.actions.createWorkflowDispatch({
-              owner: 'MasaKni',
+              owner: 'rshop',
               repo: 'docker-php',
               workflow_id: 'build.yml',
               ref: '${{ matrix.branch.name }}',
